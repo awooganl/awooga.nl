@@ -1,0 +1,91 @@
+<html>
+<head>
+  <title>VDO Speedometer Pulse Calculator</title>
+  <style>
+    body{
+      text-align: center;
+      font-family: arial;
+    }
+    .input{
+      padding: 3px;
+    }
+    .result{
+      font-size: 200%;
+    }
+  </style>
+</head>
+<body>
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+
+  <p>Welcome to the VDO Speedometer Pulse Calculator</p>
+  <p>All credit to <a href="https://forum.wscc.co.uk/forum/topic/47239-speedo-calc/">this great post</a> by The Great Fandango on the <a href="https://forum.wscc.co.uk/forum/topic/106619-vdo-speedometer-pulse-calculator/">WSCC Forums</a></p>
+  <p>&nbsp;</p>
+
+  <p>Enter your wheel size below<br>
+     <input id="tyre_width" type="text" value="185" class="input" size="5">
+     <input id="tyre_height_percentage" type="text" value="60" class="input" size="5">
+     <input id="tyre_diameter" type="text" value="13" class="input" size="5"></p>
+  <p>Enter the number of bolts on the driveshaft<br>
+     <input id="bolts" type="text" value="4" class="input" size="3"></p>
+  <p><button id="go">Calculate!</button></p>
+  <p>[A] = <span id="val_a">13</span> x 25.4mm = <span id="res_a">330.2</span>mm<br>
+     [B] = <span id="val_b">60</span>% of <span id="val_w">185</span> = <span id="res_b">111.00</span>mm</p>
+  <p>Diameter = [A] + (2 x [B]) = <span id="res_c">552.2</span>mm</p>
+  <p>Circumference = <span id="res_d">1734.79</span>mm<br>
+     1 Mile = 1609344mm</p>
+  <p>Revolutions per mile = <span id="res_e">927.69</span></p>
+  <p>Pulses per mile = <span id="val_p">4</span> x <span id="val_r">927.69</span></p>
+  <p>=</p>
+  <p><span id="res_f" class="result">3711</span></p>
+
+  <script>
+
+    //When DOM loaded we attach click event to button
+    $(document).ready(function() {
+
+      $("#go").click(function() {
+        var td = $("#tyre_diameter").val();
+        $("#val_a").text(td);
+        var res_a = td * 25.4;
+        $("#res_a").text(res_a);
+        var vb = $("#tyre_height_percentage").val();
+        var vw = $("#tyre_width").val();
+        $("#val_b").text(vb);
+        $("#val_w").text(vw);
+        var res_b = (vw / 100) * vb;
+        $("#res_b").text(res_b.toFixed(2));
+        var res_c = res_a + (2 * res_b);
+        $("#res_c").text(res_c);
+        var res_d = Math.PI * res_c;
+        $("#res_d").text(res_d.toFixed(2));
+        var res_e = 1609344 / res_d;
+        $("#res_e").text(res_e.toFixed(2));
+        var vp = $("#bolts").val();
+        $("#val_p").text(vp);
+        $("#val_r").text(res_e.toFixed(2));
+        var res_f = vp * res_e;
+        $("#res_f").text(res_f.toFixed(0));
+      });
+
+      $("#go").trigger("click");
+
+      //attach keypress to input
+      $('.input').keydown(function(event) {
+        // Allow special chars + arrows 
+        if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 
+              || event.keyCode == 27 || event.keyCode == 13 
+              || (event.keyCode == 65 && event.ctrlKey === true) 
+              || (event.keyCode >= 35 && event.keyCode <= 39)){
+          return;
+        } else {
+          // If it's not a number stop the keypress
+          if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+            event.preventDefault(); 
+          }   
+        }
+      });
+    });
+
+  </script>
+</body>
+</html>
